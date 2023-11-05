@@ -12,9 +12,10 @@
 # - подготовить форматирование данных к записи
 # - открыть файл для дозаписи
 # - добавить новый контакт в файл
+# - присвоить id контакту
 
 # 3. Вывод данных на экран: 
-# - открыть фалй на чтение 
+# - открыть файл на чтение 
 # - вывод на экран
 
 # 4. Поиск контакта
@@ -31,7 +32,7 @@
 
 
 # Домашнее задание: Дополнить справочник возможностью копирования данных из одного файла в другой. Пользователь вводит номер строки, которую необходимо перенести из одного файла в другой.
-Формат сдачи: ссылка на свой репо.
+# Формат сдачи: ссылка на свой репо.
 
 # Алгоритм мероприятий по выполнению дз: 
 # - Присвоить каждой записи порядковый номер; 
@@ -44,7 +45,6 @@ def print_data():
     with open ("phonebook.txt", "r", encoding="utf-8") as file:
         phonebook_str = file.read()
     print(phonebook_str)
-    print()
 
 def input_name():
     return input ("Введите имя контакта: ").title() 
@@ -59,16 +59,21 @@ def input_phone():
     return input ("Введите номер телефона контакта: ")  
 
 def input_address():
-    return input ("Введите адрес контакта: ").title()  
+    return input ("Введите адрес контакта: ").title()
+
+def id_contact():
+   id = 1 
+   return id
 
 def input_data():
+    id = id_contact() 
     surname = input_surname()
     name = input_name()
     patronymic = input_patronymic()
     phone = input_phone()
     address = input_address()
     my_sep = " " 
-    return f"{surname}{my_sep}{name}{my_sep}{patronymic}{my_sep}{phone}\n{address}\n\n" 
+    return f"{f"{id}. "}{surname}{my_sep}{name}{my_sep}{patronymic}{my_sep}{phone}{address}\n" 
 
 def add_contact(): 
     new_contact_str = input_data()
@@ -109,6 +114,9 @@ def search_contact ():
         print ("Такого контакта нет!")
 
 
+def replace_contact(): 
+    print_data()
+    command1 = input ("Выберите номер контакта, который Вы хотите переместить в Любимые номера: ")
 
 
 
@@ -118,15 +126,16 @@ def interface():
 
     command = ""
     os.system("cls")
-    while command != "4": 
+    while command != "5": 
         print("Меню пользователя:\n"
-        "1. Ввод данных на экран \n"
+        "1. Вывод всех записей \n"
         "2. Добавить контакт \n"
         "3. Поиск контакта \n"
-        "4. Выход \n")
+        "4. Переместить контакт в любимые номера\n"
+        "5. Выход \n")
         command = input ("Выберите пункт меню: ")
         
-        while (command not in ("1", "2", "3", "4")):
+        while (command not in ("1", "2", "3", "4", "5")):
             print("Некорректный ввод. Повторите запрос")
             command =  input ("Выберите пункт меню: ")
         
@@ -137,7 +146,9 @@ def interface():
                 add_contact()
             case "3": 
                 search_contact()
-            case "4": 
+            case "4":
+                replace_contact()
+            case "5": 
                 print("Завершение программы")
 
         print()    
