@@ -1,50 +1,14 @@
-# Создать телефонный справочник с возможностью импорта и экспорта данных в формте txt. Фамилия, имя, отчество, номер телефона.
-# Программа должна выводить данные
-# Программа должна сохранить данные в текстовом файле
-# Пользователь может ввести одну из хараетристик: для поиска определенной записи (Например, имя или фамилия человека). 
-# Использование функций. Ваша программа не должна быть линейной
-
-#1. Создать сам файл: 
-# - открываем файл на дозапись; 
-
-# 2. Добавление контакта
-# - запросить\получить у пользователя данные (проверка на корректность)
-# - подготовить форматирование данных к записи
-# - открыть файл для дозаписи
-# - добавить новый контакт в файл
-# - присвоить id контакту
-
-# 3. Вывод данных на экран: 
-# - открыть файл на чтение 
-# - вывод на экран
-
-# 4. Поиск контакта
-# - запросить/получить у пользователя данные для поиска
-# - открыть файл на чтение 
-# - произвести поиск контактов
-# - вывести на экран
-
-# 5. Интерфейс
-# - вывод на экран меню пользователя 
-# - запросить\получить у пользователя вариант режима работы
-# - вызов соответствующей функции
-# - осуществление выхода из программы
-
-
 # Домашнее задание: Дополнить справочник возможностью копирования данных из одного файла в другой. Пользователь вводит номер строки, которую необходимо перенести из одного файла в другой.
-# Формат сдачи: ссылка на свой репо.
 
-# Алгоритм мероприятий по выполнению дз: 
-# - Присвоить каждой записи порядковый номер; 
-# - Прописать возможность переноса строчки в новый документ
-
-#Очистить консоль
-import os 
+import os
+file_book = "phonebook.txt"
 
 def print_data(): 
-    with open ("phonebook.txt", "r", encoding="utf-8") as file:
+    with open (file_book, "r", encoding="utf-8") as file:
         phonebook_str = file.read()
     print(phonebook_str)
+    if phonebook_str == "": 
+        print("Телефонный справочник пуст! Добавьте запись!")
 
 def input_name():
     return input ("Введите имя контакта: ").title() 
@@ -62,8 +26,11 @@ def input_address():
     return input ("Введите адрес контакта: ").title()
 
 def id_contact():
-   id = 1 
-   return id
+    id = 1
+    file = open(file_book, encoding="utf-8")
+    for line in file:
+        id +=1
+    return id
 
 def input_data():
     id = id_contact() 
@@ -73,12 +40,14 @@ def input_data():
     phone = input_phone()
     address = input_address()
     my_sep = " " 
-    return f"{f"{id}. "}{surname}{my_sep}{name}{my_sep}{patronymic}{my_sep}{phone}{address}\n" 
+    return f"{f"{id}. "}{surname}{my_sep}{name}{my_sep}{patronymic}{my_sep}{phone}{my_sep}{address}\n" 
 
 def add_contact(): 
     new_contact_str = input_data()
-    with open ("phonebook.txt", "a", encoding="utf-8") as file:
+    with open (file_book, "a", encoding="utf-8") as file:
         file.write(new_contact_str)
+    print ("\n Сохранено!")
+    
 
 def search_contact (): 
     print("Варианты поиска:\n"
@@ -98,7 +67,7 @@ def search_contact ():
     search = input ("Введите данные для поиска: ").lower()
     print()
 
-    with open ("phonebook.txt", "r", encoding="utf-8") as file:
+    with open (file_book, "r", encoding="utf-8") as file:
         contacts_list = file.read().rstrip().split("\n\n")
 
 
@@ -109,19 +78,31 @@ def search_contact ():
             print(contact_str)
             print()
             check_cont = True
-    
+                
     if not check_cont: 
         print ("Такого контакта нет!")
 
 
 def replace_contact(): 
     print_data()
-    command1 = input ("Выберите номер контакта, который Вы хотите переместить в Любимые номера: ")
+    num = input ("Выберите номер контакта, который Вы хотите переместить в Любимые номера: ")
+    print()
+
+    with open(file_book) as source, open('LikePhones.txt', 'a') as destination:
+        check_cont = False 
+        for line in source:
+            if line.startswith(num):
+                destination.write(line) 
+                check_cont = True
+                print ("Контакт добавлен в файл Любимые номера.") 
+        
+        if not check_cont: 
+            print("Такого контакта нет!")
 
 
 
 def interface(): 
-    with open ("phonebook.txt", "a", encoding="utf-8"):
+    with open (file_book, "a", encoding="utf-8"):
         pass 
 
     command = ""
