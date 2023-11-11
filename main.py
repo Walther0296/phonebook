@@ -1,4 +1,5 @@
 # Домашнее задание: Дополнить справочник возможностью копирования данных из одного файла в другой. Пользователь вводит номер строки, которую необходимо перенести из одного файла в другой.
+# Также выполнено задание из урока. Добавление функции удаления строк. 
 
 import os
 file_book = "phonebook.txt"
@@ -97,7 +98,33 @@ def replace_contact():
                 print ("Контакт добавлен в файл Любимые номера.") 
         
         if not check_cont: 
-            print("Такого контакта нет!")
+            print("Такого контакта нет!")            
+
+def del_contact():
+        with open (file_book, "r") as file:
+            phonebook_str = file.read()
+            print(phonebook_str)
+            if phonebook_str == "":
+                print("Телефонный справочник пуст! Добавьте запись!")
+                return
+            else:  
+                num_del = input ("Выберите номер контакта, который Вы хотите удалить: ")
+        
+        with open(file_book, "r") as f:
+            lines = f.readlines()
+        with open(file_book, "w") as f:
+            check_cont = False 
+            for line in lines:
+                if line.startswith(num_del):
+                    f.write("")
+                    check_cont = True
+                    print("Контакт удален")
+                else: 
+                    f.write(line)
+            if not check_cont: 
+                print("Такого контакта нет!")     
+
+
 
 
 
@@ -107,16 +134,17 @@ def interface():
 
     command = ""
     os.system("cls")
-    while command != "5": 
+    while command != "6": 
         print("Меню пользователя:\n"
         "1. Вывод всех записей \n"
         "2. Добавить контакт \n"
         "3. Поиск контакта \n"
         "4. Переместить контакт в любимые номера\n"
-        "5. Выход \n")
+        "5. Удалить контакт\n"
+        "6. Выход \n")
         command = input ("Выберите пункт меню: ")
         
-        while (command not in ("1", "2", "3", "4", "5")):
+        while (command not in ("1", "2", "3", "4", "5", "6")):
             print("Некорректный ввод. Повторите запрос")
             command =  input ("Выберите пункт меню: ")
         
@@ -129,7 +157,9 @@ def interface():
                 search_contact()
             case "4":
                 replace_contact()
-            case "5": 
+            case "5":
+                del_contact()    
+            case "6": 
                 print("Завершение программы")
 
         print()    
